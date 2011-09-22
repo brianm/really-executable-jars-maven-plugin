@@ -1,0 +1,14 @@
+target
+report
+*.ipr
+*.iws
+*.iml
+.clover
+.idea
+build
+out
+.classpath
+.project
+.settings
+*~
+test-output
