@@ -4,7 +4,7 @@ To use it, add a plugin to your pom like
 <plugin>
   <groupId>org.skife.maven</groupId>
   <artifactId>really-executable-jar-maven-plugin</artifactId>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <configuration>
     <flags>-Xmx1G</flags>
   </configuration>
