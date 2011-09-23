@@ -3,8 +3,8 @@ To use it, add a plugin to your pom like
 ``` xml
 <plugin>
   <groupId>org.skife.maven</groupId>
-  <artifactId>really-executable-jar</artifactId>
-  <version>1.0.0</version>
+  <artifactId>really-executable-jar-maven-plugin</artifactId>
+  <version>1.0</version>
   <configuration>
     <flags>-Xmx1G</flags>
   </configuration>
@@ -20,4 +20,3 @@ To use it, add a plugin to your pom like
 </plugin>
 ```
 
-It isn't in maven central yet :-(
