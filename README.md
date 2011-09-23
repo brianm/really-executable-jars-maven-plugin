@@ -3,7 +3,7 @@ To use it, add a plugin to your pom like
 ``` xml
 <plugin>
   <groupId>org.skife.maven</groupId>
-  <artifactId>really-executable-jar</artifactId>
+  <artifactId>really-executable-jar-maven-plugin</artifactId>
   <version>1.0.0</version>
   <configuration>
     <flags>-Xmx1G</flags>
