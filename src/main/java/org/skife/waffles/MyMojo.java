@@ -1,5 +1,6 @@
 package org.skife.waffles;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -36,18 +37,26 @@ public class MyMojo extends AbstractMojo
      */
     private String flags = "";
 
+    /**
+     * Classifier of the artifact to make executable
+     *
+     * @parameter
+     */
+    private String classifier;
+
     public void execute() throws MojoExecutionException
     {
         try {
             List<File> files = new ArrayList<File>();
 
-            if (project.getArtifact() != null && project.getArtifact().getType().equals("jar")) {
+            if (shouldProcess(project.getArtifact())) {
                 files.add(project.getArtifact().getFile());
             }
 
             for (Object item : project.getAttachedArtifacts()) {
                 AttachedArtifact artifact = (AttachedArtifact) item;
-                if (artifact.getType().equals("jar")) {
+
+                if (shouldProcess(artifact)) {
                     files.add(artifact.getFile());
                 }
             }
@@ -64,6 +73,20 @@ public class MyMojo extends AbstractMojo
             throw new MojoExecutionException(e, "FAILURE!", e.getMessage());
         }
 
+    }
+
+    private boolean shouldProcess(Artifact artifact)
+    {
+        getLog().debug("Considering " + artifact);
+        if (artifact == null) {
+            return false;
+        }
+
+        if (!artifact.getType().equals("jar")) {
+            return false;
+        }
+
+        return classifier == null || classifier.equals(artifact.getClassifier());
     }
 
     private void makeExecutable(File file)
