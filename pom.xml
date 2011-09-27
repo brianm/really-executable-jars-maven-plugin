@@ -3,7 +3,7 @@
 
     <groupId>org.skife.maven</groupId>
     <artifactId>really-executable-jar-maven-plugin</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Really Executable Jar Maven Plugin</name>
