@@ -100,7 +100,7 @@ public class MyMojo extends AbstractMojo
 
             FileOutputStream out = new FileOutputStream(file);
             FileInputStream in = new FileInputStream(tmp);
-            out.write(("#!/bin/sh\n\nexec java " + flags + " -jar $0 \"$@\"\n\n").getBytes("ASCII"));
+            out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
             IOUtil.copy(in, out);
             in.close();
             out.close();
