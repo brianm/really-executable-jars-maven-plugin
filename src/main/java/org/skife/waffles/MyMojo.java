@@ -38,6 +38,13 @@ public class MyMojo extends AbstractMojo
     private String flags = "";
 
     /**
+     * The greeting to display.
+     *
+     * @parameter
+     */
+    private String programFile = null;
+
+    /**
      * Classifier of the artifact to make executable
      *
      * @parameter
@@ -68,6 +75,16 @@ public class MyMojo extends AbstractMojo
             for (File file : files) {
                 makeExecutable(file);
             }
+
+            if (programFile != null && !programFile.matches("\\s+")) {
+                for (File file : files) {
+                    File dir = file.getParentFile();
+                    File exec = new File(dir, programFile);
+                    FileUtils.copyFile(file, exec);
+                    Runtime.getRuntime().exec("chmod +x " + exec.getAbsolutePath());
+                }
+            }
+
         }
         catch (IOException e) {
             throw new MojoExecutionException(e, "FAILURE!", e.getMessage());
