@@ -8,8 +8,11 @@ To use it, add a plugin to your pom like
   <configuration>
     <!-- value of flags will be interpolated into the java invocation -->
     <!-- as "java $flags -jar ..." -->
-    <programFile>nifty-executable</programFile>
     <flags>-Xmx1G</flags>
+    
+    <!-- (optional) name for binary executable, if not set will just -->
+    <!-- make the regular jar artifact executable -->
+    <programFile>nifty-executable</programFile>
   </configuration>
  
   <executions>
