@@ -62,7 +62,6 @@ public class MyMojo extends AbstractMojo
 
             for (Object item : project.getAttachedArtifacts()) {
                 AttachedArtifact artifact = (AttachedArtifact) item;
-
                 if (shouldProcess(artifact)) {
                     files.add(artifact.getFile());
                 }
@@ -72,16 +71,17 @@ public class MyMojo extends AbstractMojo
                 throw new MojoExecutionException("Could not find any jars to make executable");
             }
 
-            for (File file : files) {
-                makeExecutable(file);
-            }
-
             if (programFile != null && !programFile.matches("\\s+")) {
                 for (File file : files) {
                     File dir = file.getParentFile();
                     File exec = new File(dir, programFile);
                     FileUtils.copyFile(file, exec);
+                    makeExecutable(exec);
                     Runtime.getRuntime().exec("chmod +x " + exec.getAbsolutePath());
+                }
+            } else {
+                for (File file : files) {
+                    makeExecutable(file);
                 }
             }
 
