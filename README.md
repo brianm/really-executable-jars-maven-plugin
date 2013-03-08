@@ -4,7 +4,7 @@ To use it, add a plugin to your pom like
 <plugin>
   <groupId>org.skife.maven</groupId>
   <artifactId>really-executable-jar-maven-plugin</artifactId>
-  <version>1.0.3</version>
+  <version>1.1.0</version>
   <configuration>
     <!-- value of flags will be interpolated into the java invocation -->
     <!-- as "java $flags -jar ..." -->
@@ -25,3 +25,10 @@ To use it, add a plugin to your pom like
   </executions>
 </plugin>
 ```
+
+Changes:
+
+1.1.0 - If programFile is set, do not make the base artifact (the
+.jar) executable, just the programFile one.
+
+1.0.0 - Stable
