@@ -52,6 +52,14 @@ To use it, add a plugin to your pom like
     <!-- (optional) name for binary executable, if not set will just -->
     <!-- make the regular jar artifact executable -->
     <programFile>nifty-executable</programFile>
+    
+    <!-- (optional) name for a file that will define what script gets -->
+    <!-- embedded into the executable jar.  This can be used to -->
+    <!-- override the default startup script which is -->
+    <!-- `#!/bin/sh -->
+    <!--            -->
+    <!-- exec java " + flags + " -jar "$0" "$@" -->
+    <scriptFile>someScript.extension</scriptFile>    
   </configuration>
 
   <executions>
