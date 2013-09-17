@@ -59,7 +59,7 @@ To use it, add a plugin to your pom like
     <!-- `#!/bin/sh -->
     <!--            -->
     <!-- exec java " + flags + " -jar "$0" "$@" -->
-    <scriptFile>someScript.extension</scriptFile>    
+    <!-- <scriptFile>src/packaging/someScript.extension</scriptFile> -->
   </configuration>
 
   <executions>
