@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +53,13 @@ public class MyMojo extends AbstractMojo
      * @parameter
      */
     private String classifier;
+
+    /**
+     *
+     * @parameter
+     * @throws MojoExecutionException
+     */
+    private String scriptFile = null;
 
     public void execute() throws MojoExecutionException
     {
@@ -111,20 +121,29 @@ public class MyMojo extends AbstractMojo
     {
         getLog().debug("Making " + file.getAbsolutePath() + " executable");
 
-        File tmp = File.createTempFile("waffles", ".tmp");
+        File oldJarStorage = File.createTempFile("waffles", ".tmp");
         try {
-            FileUtils.rename(file, tmp);
+            FileUtils.rename(file, oldJarStorage);
 
             FileOutputStream out = new FileOutputStream(file);
-            FileInputStream in = new FileInputStream(tmp);
-            out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
+            FileInputStream in = new FileInputStream(oldJarStorage);
+            if (scriptFile == null) {
+                out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
+            }
+            else {
+                getLog().debug(String.format("Loading file[%s] from jar[%s]", scriptFile, oldJarStorage));
+                final URLClassLoader loader = new URLClassLoader(new URL[]{oldJarStorage.toURI().toURL()}, null);
+                final InputStream scriptIn = loader.getResourceAsStream(scriptFile);
+                out.write(IOUtil.toString(scriptIn).getBytes("ASCII"));
+                out.write("\n\n".getBytes("ASCII"));
+            }
             IOUtil.copy(in, out);
             in.close();
             out.close();
             Runtime.getRuntime().exec("chmod +x " + file.getAbsolutePath());
         }
         finally {
-            tmp.delete();
+            oldJarStorage.delete();
         }
     }
 }
