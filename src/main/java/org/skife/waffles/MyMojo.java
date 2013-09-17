@@ -131,11 +131,11 @@ public class MyMojo extends AbstractMojo
                 out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
             }
             else {
-              getLog().debug(String.format("Loading file[%s] from jar[%s]", scriptFile, oldJarStorage));
-              final URLClassLoader loader = new URLClassLoader(new URL[]{oldJarStorage.toURI().toURL()}, null);
-              final InputStream scriptIn = loader.getResourceAsStream(scriptFile);
-              out.write(IOUtil.toString(scriptIn).getBytes("ASCII"));
-              out.write("\n\n".getBytes("ASCII"));
+                getLog().debug(String.format("Loading file[%s] from jar[%s]", scriptFile, oldJarStorage));
+                final URLClassLoader loader = new URLClassLoader(new URL[]{oldJarStorage.toURI().toURL()}, null);
+                final InputStream scriptIn = loader.getResourceAsStream(scriptFile);
+                out.write(IOUtil.toString(scriptIn).getBytes("ASCII"));
+                out.write("\n\n".getBytes("ASCII"));
             }
             IOUtil.copy(in, out);
             in.close();
