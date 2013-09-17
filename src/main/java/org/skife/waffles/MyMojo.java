@@ -87,7 +87,6 @@ public class MyMojo extends AbstractMojo
                     File exec = new File(dir, programFile);
                     FileUtils.copyFile(file, exec);
                     makeExecutable(exec);
-                    Runtime.getRuntime().exec("chmod +x " + exec.getAbsolutePath());
                 }
             } else {
                 for (File file : files) {
