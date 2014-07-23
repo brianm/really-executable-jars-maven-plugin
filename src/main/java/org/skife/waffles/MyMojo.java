@@ -4,6 +4,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 import org.apache.maven.project.artifact.AttachedArtifact;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -34,6 +35,13 @@ public class MyMojo extends AbstractMojo
     private MavenProject project;
 
     /**
+     * @component
+     * @required
+     * @readonly
+     */
+    private MavenProjectHelper projectHelper;
+
+    /**
      * The greeting to display.
      *
      * @parameter
@@ -53,6 +61,20 @@ public class MyMojo extends AbstractMojo
      * @parameter
      */
     private String classifier;
+
+    /**
+     * Attach the binary as an artifact to the deploy.
+     *
+     * @parameter
+     */
+    private boolean attachProgramFile = false;
+
+    /**
+     * File ending of the program artifact.
+     *
+     * @parameter
+     */
+    private String programFileType = "sh";
 
     /**
      *
@@ -87,6 +109,9 @@ public class MyMojo extends AbstractMojo
                     File exec = new File(dir, programFile);
                     FileUtils.copyFile(file, exec);
                     makeExecutable(exec);
+                    if (attachProgramFile) {
+                        projectHelper.attachArtifact(project, programFileType, exec);
+                    }
                 }
             } else {
                 for (File file : files) {
