@@ -5,7 +5,7 @@ report
 *.iml
 .clover
 .idea
-build
+./build
 out
 .classpath
 .project

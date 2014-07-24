@@ -1,4 +1,23 @@
+<!--
+~   Licensed under the Apache License, Version 2.0 (the "License");
+~   you may not use this file except in compliance with the License.
+~   You may obtain a copy of the License at
+~
+~   http://www.apache.org/licenses/LICENSE-2.0
+~
+~   Unless required by applicable law or agreed to in writing, software
+~   distributed under the License is distributed on an "AS IS" BASIS,
+~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~   See the License for the specific language governing permissions and
+~   limitations under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.basepom</groupId>
+        <artifactId>basepom-standard-oss</artifactId>
+        <version>4</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.skife.maven</groupId>
@@ -7,9 +26,10 @@
     <packaging>maven-plugin</packaging>
 
     <name>Really Executable Jar Maven Plugin</name>
-    <description>Make jar files *really* executable</description>
+    <description>Make jar files *really* executable.</description>
 
     <url>https://github.com/brianm/really-executable-jar-maven-plugin</url>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -31,71 +51,42 @@
         <url>https://github.com/brianm/really-executable-jars-maven-plugin</url>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Snapshots Repository</name>
-            <url>http://oss.sonatype.org/content/repositories/github-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.jdk6.home>${env.JAVA6_HOME}</project.jdk6.home>
+        <project.build.targetJdk>1.6</project.build.targetJdk>
+        <dep.maven.version>2.0.6</dep.maven.version>
+
+        <dep.plugin.release.version>2.5</dep.plugin.release.version>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>2.0.6</version>
+            <version>${dep.maven.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
-            <version>2.0.6</version>
+            <version>${dep.maven.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>${dep.maven.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.4.1</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                    <pushChanges>false</pushChanges>
-                    <localCheckout>true</localCheckout>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
@@ -112,37 +103,64 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <configuration>
+                    <excludeFilterFile>${project.basedir}/src/build/findbugsExcludeFilter.xml</excludeFilterFile>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <excludeRoots combine.children="append">
+                        <excludeRoot>target/generated-sources/plugin</excludeRoot>
+                    </excludeRoots>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>release-sign-artifacts</id>
+            <id>travis</id>
             <activation>
                 <property>
-                    <name>performRelease</name>
-                    <value>true</value>
+                    <name>env.TRAVIS</name>
                 </property>
             </activation>
+            <properties>
+                <project.jdk6.home>${env.JAVA_HOME}</project.jdk6.home>
+            </properties>
+        </profile>
+        <profile>
+            <id>cross-compile</id>
+            <activation>
+                 <jdk>(1.6,]</jdk>
+            </activation>
             <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <configuration>
+                                <compilerArguments children.combine="append">
+                                    <bootclasspath>${project.jdk6.home}/jre/lib/rt.jar:${project.jdk6.home}/jre/lib/jce.jar:${project.jdk6.home}/../classes/classes.jar</bootclasspath>
+                                </compilerArguments>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <configuration>
+                                <bootclasspath>${project.jdk6.home}/jre/lib/rt.jar:${project.jdk6.home}/jre/lib/jce.jar:${project.jdk6.home}/../classes/classes.jar</bootclasspath>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>
-
 </project>
