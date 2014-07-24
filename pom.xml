@@ -22,7 +22,7 @@
 
     <groupId>org.skife.maven</groupId>
     <artifactId>really-executable-jar-maven-plugin</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.3.0</version>
     <packaging>maven-plugin</packaging>
 
     <name>Really Executable Jar Maven Plugin</name>
@@ -49,7 +49,8 @@
         <connection>scm:git:git://github.com/brianm/really-executable-jars-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:brianm/really-executable-jars-maven-plugin.git</developerConnection>
         <url>https://github.com/brianm/really-executable-jars-maven-plugin</url>
-    </scm>
+      <tag>really-executable-jar-maven-plugin-1.3.0</tag>
+  </scm>
 
     <properties>
         <project.jdk6.home>${env.JAVA6_HOME}</project.jdk6.home>
