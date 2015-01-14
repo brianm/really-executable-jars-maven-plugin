@@ -23,12 +23,14 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +102,7 @@ public class MyMojo extends AbstractMojo
      */
     private String scriptFile = null;
 
+    @Override
     public void execute() throws MojoExecutionException
     {
         try {
@@ -162,72 +165,29 @@ public class MyMojo extends AbstractMojo
     {
         getLog().debug("Making " + file.getAbsolutePath() + " executable");
 
-        File oldJarStorage = File.createTempFile("waffles", ".tmp");
-        try {
-            FileUtils.rename(file, oldJarStorage);
+        Path original = Paths.get(file.getAbsolutePath() + ".rx-orig");
+        Files.move(file.toPath(), original);
+        try (final FileOutputStream out = new FileOutputStream(file);
+             final InputStream in = Files.newInputStream(original)) {
 
-            FileOutputStream out = null;
-            FileInputStream in = null;
-            InputStream scriptIn = null;
-            try {
-                out = new FileOutputStream(file);
-                in = new FileInputStream(oldJarStorage);
-                if (scriptFile == null) {
-                    out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
-                }
-                else {
-                    getLog().debug(String.format("Loading file[%s] from jar[%s]", scriptFile, oldJarStorage));
-                    final URLClassLoader loader = new URLClassLoader(new URL[]{oldJarStorage.toURI().toURL()}, null);
-                    scriptIn = loader.getResourceAsStream(scriptFile);
+            if (scriptFile == null) {
+                out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
+            } else {
+                getLog().debug(String.format("Loading file[%s] from jar[%s]", scriptFile, original));
+
+                try (final URLClassLoader loader = new URLClassLoader(new URL[]{original.toUri().toURL()}, null);
+                     final InputStream scriptIn = loader.getResourceAsStream(scriptFile)) {
+
                     out.write(IOUtil.toString(scriptIn).getBytes("ASCII"));
                     out.write("\n\n".getBytes("ASCII"));
                 }
-                IOUtil.copy(in, out);
-                out.flush();
-
-                file.setExecutable(true, false);
             }
-            finally {
-                IOException x = null;
-                if (in != null) {
-                    try {
-                        in.close();
-                    }
-                    catch (IOException e) {
-                        if (e != null) {
-                            x = e;
-                        }
-                    }
-                }
-                if (out != null) {
-                    try {
-                        out.close();
-                    }
-                    catch (IOException e) {
-                        if (e != null) {
-                            x = e;
-                        }
-                    }
-                }
-                if (scriptIn != null) {
-                    try {
-                        scriptIn.close();
-                    }
-                    catch (IOException e) {
-                        if (e != null) {
-                            x = e;
-                        }
-                    }
-                }
-                if (x != null) {
-                    throw x;
-                }
-            }
+            IOUtil.copy(in, out);
         }
         finally {
-            if (!oldJarStorage.delete()) {
-                throw new MojoExecutionException("FAILURE, could not delete '" + oldJarStorage.getAbsolutePath() + "'");
-            }
+            Files.deleteIfExists(original);
         }
+
+        file.setExecutable(true, false);
     }
 }
