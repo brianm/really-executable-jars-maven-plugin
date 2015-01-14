@@ -53,8 +53,8 @@
   </scm>
 
     <properties>
-        <project.jdk6.home>${env.JAVA6_HOME}</project.jdk6.home>
-        <project.build.targetJdk>1.6</project.build.targetJdk>
+        <project.jdk7.home>${env.JAVA7_HOME}</project.jdk7.home>
+        <project.build.targetJdk>1.7</project.build.targetJdk>
         <dep.maven.version>2.0.6</dep.maven.version>
 
         <dep.plugin.release.version>2.5</dep.plugin.release.version>
@@ -134,13 +134,13 @@
                 </property>
             </activation>
             <properties>
-                <project.jdk6.home>${env.JAVA_HOME}</project.jdk6.home>
+                <project.jdk7.home>${env.JAVA_HOME}</project.jdk7.home>
             </properties>
         </profile>
         <profile>
             <id>cross-compile</id>
             <activation>
-                 <jdk>(1.6,]</jdk>
+                 <jdk>(1.7,]</jdk>
             </activation>
             <build>
                 <pluginManagement>
@@ -149,14 +149,14 @@
                             <artifactId>maven-compiler-plugin</artifactId>
                             <configuration>
                                 <compilerArguments children.combine="append">
-                                    <bootclasspath>${project.jdk6.home}/jre/lib/rt.jar:${project.jdk6.home}/jre/lib/jce.jar:${project.jdk6.home}/../classes/classes.jar</bootclasspath>
+                                    <bootclasspath>${project.jdk7.home}/jre/lib/rt.jar:${project.jdk7.home}/jre/lib/jce.jar:${project.jdk7.home}/../classes/classes.jar</bootclasspath>
                                 </compilerArguments>
                             </configuration>
                         </plugin>
                         <plugin>
                             <artifactId>maven-javadoc-plugin</artifactId>
                             <configuration>
-                                <bootclasspath>${project.jdk6.home}/jre/lib/rt.jar:${project.jdk6.home}/jre/lib/jce.jar:${project.jdk6.home}/../classes/classes.jar</bootclasspath>
+                                <bootclasspath>${project.jdk7.home}/jre/lib/rt.jar:${project.jdk7.home}/jre/lib/jce.jar:${project.jdk7.home}/../classes/classes.jar</bootclasspath>
                             </configuration>
                         </plugin>
                     </plugins>
