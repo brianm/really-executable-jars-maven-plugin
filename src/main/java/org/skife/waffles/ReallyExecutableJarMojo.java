@@ -189,5 +189,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo
         }
 
         file.setExecutable(true, false);
+
+        getLog().info(String.format("Successfully made JAR [%s] executable", file.getAbsolutePath()));
     }
 }
