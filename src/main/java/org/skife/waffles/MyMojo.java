@@ -138,7 +138,7 @@ public class MyMojo extends AbstractMojo
 
         }
         catch (IOException e) {
-            throw new MojoExecutionException(e, "FAILURE!", e.getMessage());
+            throw new MojoExecutionException(e.getMessage(), e);
         }
 
     }
