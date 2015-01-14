@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @goal really-executable-jar
  */
-public class MyMojo extends AbstractMojo
+public class ReallyExecutableJarMojo extends AbstractMojo
 {
     /**
      * The Maven project.
