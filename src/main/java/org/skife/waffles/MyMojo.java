@@ -184,7 +184,8 @@ public class MyMojo extends AbstractMojo
                 }
                 IOUtil.copy(in, out);
                 out.flush();
-                Runtime.getRuntime().exec("chmod +x " + file.getAbsolutePath());
+
+                file.setExecutable(true, false);
             }
             finally {
                 IOException x = null;
