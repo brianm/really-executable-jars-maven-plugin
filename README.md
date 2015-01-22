@@ -75,6 +75,17 @@ To use it, add a plugin to your pom like
 
 Changes:
 
+1.4.0 - require Java 7, change code to use JDK7 APIs
+      - Support Windows
+      - Don't suppress errors
+
+1.3.0 - add helpmojo
+      - allow attachment of executable instead of unconditional replacement
+      - make extension configurable
+      - allow script replacement in the resulting executable
+
+1.2.0 - never released
+
 1.1.0 - If programFile is set, do not make the base artifact (the
 .jar) executable, just the programFile one.
 
