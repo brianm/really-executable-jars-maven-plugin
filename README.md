@@ -79,3 +79,7 @@ Changes:
 .jar) executable, just the programFile one.
 
 1.0.0 - Stable
+
+----
+
+[![Build Status](https://travis-ci.org/brianm/really-executable-jars-maven-plugin.svg?branch=master)](https://travis-ci.org/brianm/really-executable-jars-maven-plugin)
