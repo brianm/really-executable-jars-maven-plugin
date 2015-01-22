@@ -16,9 +16,12 @@ package org.skife.waffles;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
-import org.apache.maven.project.artifact.AttachedArtifact;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -39,67 +42,56 @@ import java.util.List;
  * can be run directly from the command line (Java must be installed and in the
  * shell path).
  *
- * @goal really-executable-jar
  */
+@Mojo(name = "really-executable-jar",
+                requiresProject = true,
+                threadSafe = true,
+                defaultPhase = LifecyclePhase.PACKAGE)
 public class ReallyExecutableJarMojo extends AbstractMojo
 {
     /**
      * The Maven project.
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject project;
 
-    /**
-     * @component
-     * @required
-     * @readonly
-     */
+    @Component
     private MavenProjectHelper projectHelper;
 
     /**
      * Java command line arguments to embed. Only used with the default stanza.
-     *
-     * @parameter
      */
+    @Parameter(defaultValue = "", property = "really-executable-jar.flags")
     private String flags = "";
 
     /**
      * Name of the generated binary.
-     *
-     * @parameter
      */
+    @Parameter(property = "really-executable-jar.programFile")
     private String programFile = null;
 
     /**
      * Specifies the classifier of the artifact that will be made executable.
-     *
-     * @parameter
      */
+    @Parameter(property = "really-executable-jar.classifier")
     private String classifier;
 
     /**
      * Attach the binary as an artifact to the deploy.
-     *
-     * @parameter
      */
+    @Parameter(defaultValue="false", property = "really-executable-jar.attachProgramFile")
     private boolean attachProgramFile = false;
 
     /**
      * File ending of the program artifact.
-     *
-     * @parameter
      */
+    @Parameter(defaultValue="sh", property = "really-executable-jar.programFileType")
     private String programFileType = "sh";
 
     /**
      * Shell script to add to the jar instead of the default stanza.
-     *
-     * @parameter
-     * @throws MojoExecutionException
      */
+    @Parameter(property = "really-executable-jar.scriptFile")
     private String scriptFile = null;
 
     @Override
@@ -112,10 +104,9 @@ public class ReallyExecutableJarMojo extends AbstractMojo
                 files.add(project.getArtifact().getFile());
             }
 
-            for (Object item : project.getAttachedArtifacts()) {
-                AttachedArtifact artifact = (AttachedArtifact) item;
-                if (shouldProcess(artifact)) {
-                    files.add(artifact.getFile());
+            for (Artifact item : project.getAttachedArtifacts()) {
+                if (shouldProcess(item)) {
+                    files.add(item.getFile());
                 }
             }
 
