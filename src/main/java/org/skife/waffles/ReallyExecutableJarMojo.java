@@ -163,7 +163,15 @@ public class ReallyExecutableJarMojo extends AbstractMojo
 
             if (scriptFile == null) {
                 out.write(("#!/bin/sh\n\nexec java " + flags + " -jar \"$0\" \"$@\"\n\n").getBytes("ASCII"));
-            } else {
+            }
+            else if (Files.exists(Paths.get((scriptFile)))) {
+                getLog().debug(String.format("Loading file[%s] from filesystem", scriptFile));
+
+                byte[] script = Files.readAllBytes(Paths.get(scriptFile));
+                out.write(script);
+                out.write(new byte[]{'\n', '\n'});
+            }
+            else {
                 getLog().debug(String.format("Loading file[%s] from jar[%s]", scriptFile, original));
 
                 try (final URLClassLoader loader = new URLClassLoader(new URL[]{original.toUri().toURL()}, null);
