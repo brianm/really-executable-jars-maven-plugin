@@ -77,6 +77,12 @@ public class ReallyExecutableJarMojo extends AbstractMojo
     private String classifier;
 
     /**
+     * Allow other packaging types than "jar".
+     */
+    @Parameter(property = "really-executable-jar.allowOtherTypes")
+    private String allowOtherTypes;
+
+    /**
      * Attach the binary as an artifact to the deploy.
      */
     @Parameter(defaultValue="false", property = "really-executable-jar.attachProgramFile")
@@ -144,7 +150,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo
             return false;
         }
 
-        if (!artifact.getType().equals("jar")) {
+        if (!Boolean.valueOf(allowOtherTypes) && !artifact.getType().equals("jar")) {
             return false;
         }
 
