@@ -52,6 +52,9 @@ To use it, add a plugin to your pom like
     <!-- (optional) name for binary executable, if not set will just -->
     <!-- make the regular jar artifact executable -->
     <programFile>nifty-executable</programFile>
+
+    <!-- (optional) support other packaging formats than jar -->
+    <!-- <allowOtherTypes>true</allowOtherTypes> -->
     
     <!-- (optional) name for a file that will define what script gets -->
     <!-- embedded into the executable jar.  This can be used to -->
