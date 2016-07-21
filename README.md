@@ -94,6 +94,8 @@ Changes:
 
 1.0.0 - Stable
 
+There is an introductory blog post at http://skife.org/java/unix/2011/06/20/really_executable_jars.html
+
 ----
 
 [![Build Status](https://travis-ci.org/brianm/really-executable-jars-maven-plugin.svg?branch=master)](https://travis-ci.org/brianm/really-executable-jars-maven-plugin)
