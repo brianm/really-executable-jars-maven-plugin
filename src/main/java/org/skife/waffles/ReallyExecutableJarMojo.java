@@ -22,8 +22,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -124,7 +122,6 @@ public class ReallyExecutableJarMojo extends AbstractMojo
                 for (File file : files) {
                     File dir = file.getParentFile();
                     File exec = new File(dir, programFile);
-                    FileUtils.copyFile(file, exec);
                     makeExecutable(exec);
                     if (attachProgramFile) {
                         projectHelper.attachArtifact(project, programFileType, exec);
@@ -183,11 +180,11 @@ public class ReallyExecutableJarMojo extends AbstractMojo
                 try (final URLClassLoader loader = new URLClassLoader(new URL[]{original.toUri().toURL()}, null);
                      final InputStream scriptIn = loader.getResourceAsStream(scriptFile)) {
 
-                    out.write(IOUtil.toString(scriptIn).getBytes("ASCII"));
+                    //out.write(IOUtil.toString(scriptIn).getBytes("ASCII"));
                     out.write("\n\n".getBytes("ASCII"));
                 }
             }
-            IOUtil.copy(in, out);
+            //IOUtil.copy(in, out);
         }
         finally {
             Files.deleteIfExists(original);
@@ -196,5 +193,9 @@ public class ReallyExecutableJarMojo extends AbstractMojo
         file.setExecutable(true, false);
 
         getLog().info(String.format("Successfully made JAR [%s] executable", file.getAbsolutePath()));
+    }
+
+    public static void main(String[] args) {
+        System.out.println("hello, world");
     }
 }

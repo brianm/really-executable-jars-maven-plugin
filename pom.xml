@@ -14,15 +14,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.basepom</groupId>
-        <artifactId>basepom-standard-oss</artifactId>
-        <version>9</version>
+        <artifactId>basepom-oss</artifactId>
+        <version>42</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.skife.maven</groupId>
     <artifactId>really-executable-jar-maven-plugin</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Really Executable Jar Maven Plugin</name>
@@ -46,57 +46,36 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/brianm/really-executable-jars-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:brianm/really-executable-jars-maven-plugin.git</developerConnection>
+        <connection>scm:git:https://github.com/brianm/really-executable-jars-maven-plugin.git</connection>
         <url>https://github.com/brianm/really-executable-jars-maven-plugin</url>
       <tag>HEAD</tag>
   </scm>
-
-    <properties>
-        <project.jdk7.home>${env.JAVA7_HOME}</project.jdk7.home>
-        <project.build.targetJdk>1.7</project.build.targetJdk>
-        <dep.maven-api.version>3.0</dep.maven-api.version>
-        <dep.plexus.version>1.5.5</dep.plexus.version>
-        <dep.plexus-utils.version>2.0.4</dep.plexus-utils.version>
-        <dep.plugin.plugin.version>3.4</dep.plugin.plugin.version>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>${dep.maven-api.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.sonatype.sisu</groupId>
-                    <artifactId>sisu-inject-plexus</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>3.8.3</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>${dep.plugin.plugin.version}</version>
+            <version>3.6.1</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${dep.plexus-utils.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>${dep.maven-api.version}</version>
+            <version>3.8.3</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>${dep.maven-api.version}</version>
+            <version>3.8.3</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.maven.reporting</groupId>
@@ -142,107 +121,23 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-component-metadata</artifactId>
-                    <version>${dep.plexus.version}</version>
-                </plugin>
-
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>${dep.plugin.plugin.version}</version>
+                    <version>3.6.1</version>
                     <configuration>
                         <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>mojo-descriptor</id>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>descriptor</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
-
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-plugin-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>mojo-descriptor</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>descriptor</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>help-goal</id>
-                        <goals>
-                            <goal>helpmojo</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.plexus</groupId>
-                <artifactId>plexus-component-metadata</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate-metadata</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <configuration>
-                    <excludeFilterFile>${project.basedir}/src/build/findbugsExcludeFilter.xml</excludeFilterFile>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <configuration>
-                    <excludeRoots combine.children="append">
-                        <excludeRoot>target/generated-sources/plugin</excludeRoot>
-                    </excludeRoots>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>travis</id>
-            <activation>
-                <property>
-                    <name>env.TRAVIS</name>
-                </property>
-            </activation>
-            <properties>
-                <project.jdk7.home>${env.JAVA_HOME}</project.jdk7.home>
-            </properties>
-        </profile>
-        <profile>
-            <id>cross-compile</id>
-            <activation>
-                 <jdk>(1.7,]</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <configuration>
-                                <compilerArguments children.combine="append">
-                                    <bootclasspath>${project.jdk7.home}/jre/lib/rt.jar:${project.jdk7.home}/jre/lib/jce.jar:${project.jdk7.home}/../classes/classes.jar</bootclasspath>
-                                </compilerArguments>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
 </project>
