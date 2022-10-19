@@ -78,6 +78,8 @@ To use it, add a plugin to your pom like
 
 Changes:
 
+2.0.0 - support ZIP64 format
+
 1.4.0 - require Java 7, change code to use JDK7 APIs
       - Support Windows
       - Don't suppress errors
