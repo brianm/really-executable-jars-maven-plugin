@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.basepom</groupId>
         <artifactId>basepom-standard-oss</artifactId>
-        <version>9</version>
+        <version>15</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
