@@ -56,7 +56,7 @@
         <project.build.targetJdk>1.8</project.build.targetJdk>
         <dep.maven-api.version>3.0</dep.maven-api.version>
         <dep.plexus.version>2.1.1</dep.plexus.version>
-        <dep.plexus-utils.version>2.0.4</dep.plexus-utils.version>
+        <dep.plexus-utils.version>3.0.16</dep.plexus-utils.version>
         <dep.plugin.plugin.version>3.4</dep.plugin.plugin.version>
     </properties>
 
