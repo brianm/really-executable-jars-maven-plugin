@@ -55,7 +55,7 @@
     <properties>
         <project.build.targetJdk>1.8</project.build.targetJdk>
         <dep.maven-api.version>3.0</dep.maven-api.version>
-        <dep.plexus.version>1.5.5</dep.plexus.version>
+        <dep.plexus.version>2.1.1</dep.plexus.version>
         <dep.plexus-utils.version>2.0.4</dep.plexus-utils.version>
         <dep.plugin.plugin.version>3.4</dep.plugin.plugin.version>
     </properties>
@@ -200,6 +200,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
                 <configuration>
                     <excludeFilterFile>${project.basedir}/src/build/findbugsExcludeFilter.xml</excludeFilterFile>
                 </configuration>
