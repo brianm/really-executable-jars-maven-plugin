@@ -15,14 +15,14 @@
     <parent>
         <groupId>org.basepom</groupId>
         <artifactId>basepom-standard-oss</artifactId>
-        <version>9</version>
+        <version>15</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.skife.maven</groupId>
     <artifactId>really-executable-jar-maven-plugin</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Really Executable Jar Maven Plugin</name>
@@ -53,10 +53,9 @@
   </scm>
 
     <properties>
-        <project.jdk7.home>${env.JAVA7_HOME}</project.jdk7.home>
-        <project.build.targetJdk>1.7</project.build.targetJdk>
+        <project.build.targetJdk>1.8</project.build.targetJdk>
         <dep.maven-api.version>3.0</dep.maven-api.version>
-        <dep.plexus.version>1.5.5</dep.plexus.version>
+        <dep.plexus.version>2.1.1</dep.plexus.version>
         <dep.plexus-utils.version>2.0.4</dep.plexus-utils.version>
         <dep.plugin.plugin.version>3.4</dep.plugin.plugin.version>
     </properties>
@@ -85,6 +84,12 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
             <version>${dep.plexus-utils.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.22</version>
         </dependency>
 
         <dependency>
@@ -195,6 +200,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
                 <configuration>
                     <excludeFilterFile>${project.basedir}/src/build/findbugsExcludeFilter.xml</excludeFilterFile>
                 </configuration>
@@ -211,38 +217,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>travis</id>
-            <activation>
-                <property>
-                    <name>env.TRAVIS</name>
-                </property>
-            </activation>
-            <properties>
-                <project.jdk7.home>${env.JAVA_HOME}</project.jdk7.home>
-            </properties>
-        </profile>
-        <profile>
-            <id>cross-compile</id>
-            <activation>
-                 <jdk>(1.7,]</jdk>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <configuration>
-                                <compilerArguments children.combine="append">
-                                    <bootclasspath>${project.jdk7.home}/jre/lib/rt.jar:${project.jdk7.home}/jre/lib/jce.jar:${project.jdk7.home}/../classes/classes.jar</bootclasspath>
-                                </compilerArguments>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
 </project>
