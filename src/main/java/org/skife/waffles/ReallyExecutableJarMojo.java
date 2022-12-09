@@ -53,7 +53,6 @@ import static org.apache.commons.compress.archivers.zip.Zip64Mode.AlwaysWithComp
  *
  */
 @Mojo(name = "really-executable-jar",
-                requiresProject = true,
                 threadSafe = true,
                 defaultPhase = LifecyclePhase.PACKAGE)
 public class ReallyExecutableJarMojo extends AbstractMojo
