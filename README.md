@@ -43,7 +43,7 @@ To use it, add a plugin to your pom like
 <plugin>
   <groupId>org.skife.maven</groupId>
   <artifactId>really-executable-jar-maven-plugin</artifactId>
-  <version>1.4.1</version>
+  <version>2.0.0</version>
   <configuration>
     <!-- value of flags will be interpolated into the java invocation -->
     <!-- as "java $flags -jar ..." -->
@@ -80,6 +80,7 @@ Changes:
 
 2.0.0 - support ZIP64 format
       - require Java 8, drop support for JDK7
+      - support packaging other file formats than jars
 
 1.4.0 - require Java 7, change code to use JDK7 APIs
       - Support Windows
