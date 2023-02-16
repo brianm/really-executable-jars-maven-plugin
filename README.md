@@ -1,12 +1,15 @@
-To use it, add a plugin to your pom like
+# really-executable-jar-maven-plugin
+
+There is an introductory blog post at http://skife.org/java/unix/2011/06/20/really_executable_jars.html
+
+To use it, add a plugin to your pom like:
 
 ``` xml
-
 <!-- You need to build an exectuable uberjar, I like Shade for that -->
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-shade-plugin</artifactId>
-    <version>2.0</version>
+    <version>3.4.1</version>
     <executions>
         <execution>
             <phase>package</phase>
@@ -15,7 +18,6 @@ To use it, add a plugin to your pom like
             </goals>
             <configuration>
                 <transformers>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                     <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 
                         <!-- note that the main class is set *here* -->
@@ -24,16 +26,6 @@ To use it, add a plugin to your pom like
                     </transformer>
                 </transformers>
                 <createDependencyReducedPom>false</createDependencyReducedPom>
-                <filters>
-                    <filter>
-                        <artifact>*:*</artifact>
-                        <excludes>
-                            <exclude>META-INF/*.SF</exclude>
-                            <exclude>META-INF/*.DSA</exclude>
-                            <exclude>META-INF/*.RSA</exclude>
-                        </excludes>
-                    </filter>
-                </filters>
             </configuration>
         </execution>
     </executions>
@@ -43,7 +35,7 @@ To use it, add a plugin to your pom like
 <plugin>
   <groupId>org.skife.maven</groupId>
   <artifactId>really-executable-jar-maven-plugin</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
   <configuration>
     <!-- value of flags will be interpolated into the java invocation -->
     <!-- as "java $flags -jar ..." -->
@@ -78,6 +70,11 @@ To use it, add a plugin to your pom like
 
 Changes:
 
+```
+2.1.0 - use zip-prefixer instead of rebuilding JAR
+      - add basic integration test script
+      - update basepom, use wrapper to ensure Maven version
+
 2.0.0 - support ZIP64 format
       - require Java 8, drop support for JDK7
       - support packaging other file formats than jars
@@ -97,9 +94,6 @@ Changes:
 .jar) executable, just the programFile one.
 
 1.0.0 - Stable
+```
 
-There is an introductory blog post at http://skife.org/java/unix/2011/06/20/really_executable_jars.html
 
-----
-
-[![Build Status](https://travis-ci.org/brianm/really-executable-jars-maven-plugin.svg?branch=master)](https://travis-ci.org/brianm/really-executable-jars-maven-plugin)
