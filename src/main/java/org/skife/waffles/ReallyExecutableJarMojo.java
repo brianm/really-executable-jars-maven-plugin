@@ -60,6 +60,12 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
     private MavenProjectHelper projectHelper;
 
     /**
+     * Specific file to make executable instead of default artifact(s).
+     */
+    @Parameter(property = "really-executable-jar.inputFile")
+    private File inputFile = null;
+
+    /**
      * Java command line arguments to embed. Only used with the default stanza.
      */
     @Parameter(property = "really-executable-jar.flags")
@@ -72,7 +78,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
     private String programFile = null;
 
     /**
-     * Specifies the classifier of the artifact that will be made executable.
+     * If set, only artifacts with this classifier are made executable.
      */
     @Parameter(property = "really-executable-jar.classifier")
     private String classifier;
@@ -80,8 +86,8 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
     /**
      * Allow other packaging types than "jar".
      */
-    @Parameter(property = "really-executable-jar.allowOtherTypes")
-    private String allowOtherTypes;
+    @Parameter(defaultValue = "false", property = "really-executable-jar.allowOtherTypes")
+    private boolean allowOtherTypes;
 
     /**
      * Attach the binary as an artifact to the deploy.
@@ -106,13 +112,21 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
         try {
             List<File> files = new ArrayList<>();
 
-            if (shouldProcess(project.getArtifact())) {
-                files.add(project.getArtifact().getFile());
-            }
+            if (inputFile != null) {
+                if (inputFile.exists()) {
+                    files.add(inputFile);
+                } else {
+                    throw new MojoExecutionException("Unable to find " + inputFile);
+                }
+            } else {
+                if (shouldProcess(project.getArtifact())) {
+                    files.add(project.getArtifact().getFile());
+                }
 
-            for (Artifact item : project.getAttachedArtifacts()) {
-                if (shouldProcess(item)) {
-                    files.add(item.getFile());
+                for (Artifact item : project.getAttachedArtifacts()) {
+                    if (shouldProcess(item)) {
+                        files.add(item.getFile());
+                    }
                 }
             }
 
@@ -135,7 +149,6 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
                     makeExecutable(file);
                 }
             }
-
         } catch (IOException e) {
             throw new MojoExecutionException(e.getMessage(), e);
         }
@@ -147,7 +160,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
             return false;
         }
 
-        if (!Boolean.parseBoolean(allowOtherTypes) && !artifact.getType().equals("jar")) {
+        if (!allowOtherTypes && !artifact.getType().equals("jar")) {
             return false;
         }
 
@@ -188,7 +201,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
 
             try (URLClassLoader loader = new URLClassLoader(new URL[]{uri.toURL()}, null);
                  InputStream scriptIn = loader.getResourceAsStream(scriptFile)) {
-                if(scriptIn == null) {
+                if (scriptIn == null) {
                     throw new IOException("unable to load " + scriptFile);
                 }
                 return IOUtils.toByteArray(scriptIn); // Java 9+: scriptIn.readAllBytes();
@@ -197,4 +210,5 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
             throw new MojoExecutionException("unable to load preamble data", e);
         }
     }
+
 }
