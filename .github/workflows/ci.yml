@@ -27,4 +27,4 @@ jobs:
         mvn -ntp -B install
     - name: Run integration tests
       run: |
-        src/test/integration-test.sh
+        src/it/integration-test.sh

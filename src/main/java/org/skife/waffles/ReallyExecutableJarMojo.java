@@ -72,7 +72,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
     private String flags = "";
 
     /**
-     * Name of the generated binary.
+     * Name of the generated binary. This does not work with multiple artifacts.
      */
     @Parameter(property = "really-executable-jar.programFile")
     private String programFile = null;
@@ -90,13 +90,13 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
     private boolean allowOtherTypes;
 
     /**
-     * Attach the binary as an artifact to the deploy.
+     * Attach the binary as an artifact to the deploy (if programFile is set).
      */
     @Parameter(defaultValue = "false", property = "really-executable-jar.attachProgramFile")
     private boolean attachProgramFile = false;
 
     /**
-     * File ending of the program artifact.
+     * File ending of the program artifact to attach (if programFile and attachProgramFile are set).
      */
     @Parameter(defaultValue = "sh", property = "really-executable-jar.programFileType")
     private String programFileType = "sh";
@@ -135,14 +135,17 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
             }
 
             if (programFile != null && !programFile.matches("\\s+")) {  // Java 11+: isBlank()
-                for (File file : files) {
-                    File dir = file.getParentFile();
-                    File exec = new File(dir, programFile);
-                    Files.copy(file.toPath(), exec.toPath());
-                    makeExecutable(exec);
-                    if (attachProgramFile) {
-                        projectHelper.attachArtifact(project, programFileType, exec);
-                    }
+                if (files.size() > 1) {
+                    throw new MojoExecutionException("programFile set, but multiple candidate artifacts found: " + files);
+                }
+
+                File file = files.get(0);
+                File dir = file.getParentFile();
+                File exec = new File(dir, programFile);
+                Files.copy(file.toPath(), exec.toPath());
+                makeExecutable(exec);
+                if (attachProgramFile) {
+                    projectHelper.attachArtifact(project, programFileType, exec);
                 }
             } else {
                 for (File file : files) {

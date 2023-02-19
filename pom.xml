@@ -127,7 +127,7 @@
         </plugins>
         <testResources>
             <testResource>
-                <directory>src/test/resources/</directory>
+                <directory>src/it/resources/</directory>
                 <filtering>true</filtering>
             </testResource>
         </testResources>
