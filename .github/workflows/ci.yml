@@ -23,7 +23,12 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: |
-          mvn -ntp -B package
+          ./mvnw -ntp -B package
       - name: Run integration tests
         run: |
-          mvn -e -ntp -B -Dinvoker.javaHome="$JAVA_HOME_${{ env.TEST_JDK }}_${{ runner.arch }}" verify
+          ./mvnw -e -ntp -B -Dinvoker.javaHome="$JAVA_HOME_${{ env.TEST_JDK }}_${{ runner.arch }}" verify
+      - name: Run integration tests on older Maven
+        run: |
+          ./mvnw wrapper:wrapper -Dmaven=3.6.0
+          ./mvnw -e -B -Dinvoker.javaHome="$JAVA_HOME_${{ env.TEST_JDK }}_${{ runner.arch }}" verify
+
