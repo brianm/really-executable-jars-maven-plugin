@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  [ "push", "pull_request" ]
+
+env:
+  BUILD_JDK: '17'
+  TEST_JDK: '8'
+
+jobs:
+  build:
+    name: build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: |
+            ${{ env.TEST_JDK }}
+            ${{ env.BUILD_JDK }}
+          distribution: 'corretto'
+          cache: maven
+      - name: Build with Maven
+        run: |
+          ./mvnw -ntp -B package
+      - name: Run integration tests
+        run: |
+          ./mvnw -e -ntp -B -Dinvoker.javaHome="$JAVA_HOME_${{ env.TEST_JDK }}_${{ runner.arch }}" verify
+      - name: Run integration tests on older Maven
+        run: |
+          ./mvnw wrapper:wrapper -Dmaven=3.6.0
+          ./mvnw -e -B -Dinvoker.javaHome="$JAVA_HOME_${{ env.TEST_JDK }}_${{ runner.arch }}" verify
+

@@ -11,18 +11,19 @@
 ~   See the License for the specific language governing permissions and
 ~   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.basepom</groupId>
-        <artifactId>basepom-standard-oss</artifactId>
-        <version>15</version>
+        <artifactId>basepom-oss</artifactId>
+        <version>52</version>
     </parent>
-
-    <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.skife.maven</groupId>
     <artifactId>really-executable-jar-maven-plugin</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Really Executable Jar Maven Plugin</name>
@@ -49,129 +50,67 @@
         <connection>scm:git:git://github.com/brianm/really-executable-jars-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:brianm/really-executable-jars-maven-plugin.git</developerConnection>
         <url>https://github.com/brianm/really-executable-jars-maven-plugin</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
-        <project.build.targetJdk>1.8</project.build.targetJdk>
-        <dep.maven-api.version>3.0</dep.maven-api.version>
-        <dep.plexus.version>2.1.1</dep.plexus.version>
-        <dep.plexus-utils.version>2.0.4</dep.plexus-utils.version>
-        <dep.plugin.plugin.version>3.4</dep.plugin.plugin.version>
+        <project.build.targetJdk>8</project.build.targetJdk>
+        <basepom.check.skip-license>true</basepom.check.skip-license>
+        <basepom.check.skip-dependency>true</basepom.check.skip-dependency>
+
+        <maven.version>3.8.7</maven.version>
+        <maven.plugin-stuff.version>3.7.1</maven.plugin-stuff.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>net.e175.klaus</groupId>
+            <artifactId>zip-prefixer</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>${dep.maven-api.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.sonatype.sisu</groupId>
-                    <artifactId>sisu-inject-plexus</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>${dep.plugin.plugin.version}</version>
+            <version>${maven.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${dep.plexus-utils.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-compress</artifactId>
-            <version>1.22</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-artifact</artifactId>
-            <version>${dep.maven-api.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>${dep.maven-api.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.maven.reporting</groupId>
-                    <artifactId>maven-reporting-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.maven.wagon</groupId>
-                    <artifactId>wagon-file</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.maven.wagon</groupId>
-                    <artifactId>wagon-http-lightweight</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.maven.wagon</groupId>
-                    <artifactId>wagon-ssh</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.maven.wagon</groupId>
-                    <artifactId>wagon-ssh-external</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-cli</groupId>
-                    <artifactId>commons-cli</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>classworlds</groupId>
-                    <artifactId>classworlds</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-interactivity-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.sonatype.sisu</groupId>
-                    <artifactId>sisu-inject-plexus</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>${maven.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>${maven.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>${maven.plugin-stuff.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
-
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.codehaus.plexus</groupId>
-                    <artifactId>plexus-component-metadata</artifactId>
-                    <version>${dep.plexus.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-plugin-plugin</artifactId>
-                    <version>${dep.plugin.plugin.version}</version>
-                    <configuration>
-                        <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
+                <version>${maven.plugin-stuff.version}</version>
+                <configuration>
+                    <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
+                </configuration>
                 <executions>
                     <execution>
                         <id>mojo-descriptor</id>
-                        <phase>process-classes</phase>
                         <goals>
                             <goal>descriptor</goal>
                         </goals>
@@ -184,37 +123,18 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.plexus</groupId>
-                <artifactId>plexus-component-metadata</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate-metadata</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
-                <configuration>
-                    <excludeFilterFile>${project.basedir}/src/build/findbugsExcludeFilter.xml</excludeFilterFile>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
+                <artifactId>maven-invoker-plugin</artifactId>
                 <configuration>
-                    <excludeRoots combine.children="append">
-                        <excludeRoot>target/generated-sources/plugin</excludeRoot>
-                    </excludeRoots>
+                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                    <settingsFile>src/it/settings.xml</settingsFile>
+                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                    <postBuildHookScript>verify</postBuildHookScript>
+                    <parallelThreads>1</parallelThreads>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

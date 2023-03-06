@@ -12,3 +12,4 @@ out
 .settings
 *~
 test-output
+/.mvn/wrapper/maven-wrapper.jar
