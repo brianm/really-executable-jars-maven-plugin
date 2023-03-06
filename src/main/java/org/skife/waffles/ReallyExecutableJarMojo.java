@@ -14,7 +14,6 @@
 package org.skife.waffles;
 
 import net.e175.klaus.zip.ZipPrefixer;
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -24,6 +23,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -178,7 +179,8 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
 
         Path target = file.toPath();
         try {
-            ZipPrefixer.applyPrefixesToZip(target, getPreamble(target.toUri()), "\n\n".getBytes(UTF_8));
+            ZipPrefixer.applyPrefixBytesToZip(target,
+                    Arrays.asList(getPreamble(target.toUri()), "\n\n".getBytes(UTF_8)));
         } catch (IOException e) {
             throw new MojoExecutionException(format("Failed to apply prefix to JAR [%s]", file.getAbsolutePath()), e);
         }
@@ -204,11 +206,10 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
                 if (scriptIn == null) {
                     throw new IOException("unable to load " + scriptFile);
                 }
-                return IOUtils.toByteArray(scriptIn); // Java 9+: scriptIn.readAllBytes();
+                return IOUtil.toByteArray(scriptIn); // Java 9+: scriptIn.readAllBytes();
             }
         } catch (IOException e) {
             throw new MojoExecutionException("unable to load preamble data", e);
         }
     }
-
 }
