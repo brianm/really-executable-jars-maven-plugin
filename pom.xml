@@ -127,10 +127,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-invoker-plugin</artifactId>
                 <configuration>
-                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-                    <settingsFile>src/it/settings.xml</settingsFile>
-                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <postBuildHookScript>verify</postBuildHookScript>
                     <parallelThreads>1</parallelThreads>
                 </configuration>
             </plugin>
