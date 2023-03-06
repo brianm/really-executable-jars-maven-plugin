@@ -1,4 +1,4 @@
-File jar = new File(new File(basedir, "target"), 'testapp-1.0.jar')
+File jar = new File(new File(basedir, "target"), 'test-005-1.0-SNAPSHOT.jar')
 assert jar.exists()
 try {
     result = jar.toString().execute().text
@@ -6,7 +6,7 @@ try {
 } catch (IOException ignored) {
 }
 
-File jar2 = new File(new File(basedir, "target"), 'testapp-1.0-secondary.jar')
+File jar2 = new File(new File(basedir, "target"), 'test-005-1.0-SNAPSHOT-secondary.jar')
 assert jar2.exists()
 result = jar2.toString().execute().text
 assert result.contains("Hello world!")
