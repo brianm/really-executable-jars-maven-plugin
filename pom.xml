@@ -126,5 +126,13 @@
             </plugin>
         </plugins>
     </build>
-
+    <profiles>
+        <profile>
+            <id>basepom.oss-release</id>
+            <properties>
+                <!-- fixed in basepom-53 -->
+                <basepom.it.skip>true</basepom.it.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>
