@@ -58,6 +58,8 @@
         <basepom.check.skip-license>true</basepom.check.skip-license>
         <basepom.check.skip-dependency>true</basepom.check.skip-dependency>
 
+        <!-- legacy project, provisioned on oss -->
+        <basepom.nexus-staging.staging-url>https://oss.sonatype.org/</basepom.nexus-staging.staging-url>
         <dep.plugin.plugin.version>3.7.1</dep.plugin.plugin.version>
     </properties>
 
