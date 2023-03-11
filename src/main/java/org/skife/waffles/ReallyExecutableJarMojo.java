@@ -34,6 +34,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -143,7 +144,7 @@ public class ReallyExecutableJarMojo extends AbstractMojo {
                 File file = files.get(0);
                 File dir = file.getParentFile();
                 File exec = new File(dir, programFile);
-                Files.copy(file.toPath(), exec.toPath());
+                Files.copy(file.toPath(), exec.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 makeExecutable(exec);
                 if (attachProgramFile) {
                     projectHelper.attachArtifact(project, programFileType, exec);
