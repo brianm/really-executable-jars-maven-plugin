@@ -71,11 +71,13 @@ To use it, add a plugin to your pom like:
 Changes:
 
 ```
-2.1.0 - use zip-prefixer instead of rebuilding JAR
-      - improve handling of multi-artifact builds
-      - add inputFile parameter to select any file
-      - add basic integration testing
-      - require JDK 11+ to build (plugin still targets JDK 8)
+2.1.1 - Overwrite existing files (@dkfellows)
+
+2.1.0 - use zip-prefixer instead of rebuilding JAR (@klausbrunner)
+      - improve handling of multi-artifact builds (@klausbrunner)
+      - add inputFile parameter to select any file (@klausbrunner)
+      - add basic integration testing (@klausbrunner)
+      - require JDK 11+ to build (plugin still targets JDK 8) 
 
 2.0.0 - support ZIP64 format
       - require Java 8, drop support for JDK7
