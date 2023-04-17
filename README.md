@@ -1,6 +1,6 @@
 # really-executable-jar-maven-plugin
 
-[![Maven](https://img.shields.io/maven-central/v/org.skife.maven/really-executable-jar-maven-plugin)](https://central.sonatype.com/search?q=really-executable-jar-maven-plugin&namespace=org.skife.maven)
+[![Maven](https://img.shields.io/maven-central/v/org.skife.maven/really-executable-jar-maven-plugin)](https://central.sonatype.com/artifact/org.skife.maven/really-executable-jar-maven-plugin/)
 
 ## Usage
 
