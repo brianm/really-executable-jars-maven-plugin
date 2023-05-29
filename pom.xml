@@ -28,7 +28,7 @@
     <name>Really Executable Jar Maven Plugin</name>
     <description>Make jar files *really* executable.</description>
 
-    <url>https://github.com/brianm/really-executable-jar-maven-plugin</url>
+    <url>https://github.com/brianm/really-executable-jars-maven-plugin</url>
 
     <licenses>
         <license>
